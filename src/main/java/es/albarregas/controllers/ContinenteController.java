@@ -78,11 +78,6 @@ public class ContinenteController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-
-
-
-
             String fecha = request.getParameter("fecha_construccion");
             String valor = request.getParameter("valor_estimado");
             String n_hab = request.getParameter("n_hab");

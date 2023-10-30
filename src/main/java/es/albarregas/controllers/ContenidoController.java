@@ -7,12 +7,13 @@ package es.albarregas.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import es.albarregas.beans.ContenidoBean;
 import es.albarregas.models.CalcularCuota;
@@ -21,17 +22,17 @@ import es.albarregas.models.CalcularCuota;
  *
  * @author Pedro Lazaro
  */
-@WebServlet(name = "ContenidoController", urlPatterns = {"/ContenidoController"})
+@WebServlet(name = "ContenidoController", urlPatterns = { "/ContenidoController" })
 public class ContenidoController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -41,7 +42,7 @@ public class ContenidoController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ContenidoServlet</title>");            
+            out.println("<title>Servlet ContenidoServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ContenidoServlet at " + request.getContextPath() + "</h1>");
@@ -53,10 +54,10 @@ public class ContenidoController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -67,32 +68,31 @@ public class ContenidoController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String danios = request.getParameter("danios");
-        String franquicia = request.getParameter("franquicia");
-        String cantidad = request.getParameter("cantidad");
 
         CalcularCuota calcular = new CalcularCuota();
+        ContenidoBean contenido = new ContenidoBean();
+
+        try {
+            BeanUtils.populate(contenido, request.getParameterMap());
+        } catch (Exception e) {
+            // Manejar excepciones si ocurren
+            e.printStackTrace();
+        }
 
 
-            ContenidoBean contenido = new ContenidoBean();
+        contenido.setCuota(calcular.cuotaContenido(contenido));
 
+        request.setAttribute("contenido", contenido);
+        request.getRequestDispatcher("JSP/vistaFinal.jsp").forward(request, response);
 
-            contenido.setCantidad(cantidad);
-            contenido.setDanios(danios != null);
-            contenido.setFranquicia(franquicia);
-            contenido.setCuota(calcular.cuotaContenido(contenido));
-
-            request.setAttribute("contenido", contenido);
-
-            request.getRequestDispatcher("JSP/vistaFinal.jsp").forward(request, response);
     }
 
     /**

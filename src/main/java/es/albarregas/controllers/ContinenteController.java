@@ -13,12 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import org.apache.commons.beanutils.BeanUtils;
 
 import es.albarregas.beans.ContinenteBean;
-import es.albarregas.beans.EleccionBean;    
+import es.albarregas.beans.EleccionBean;
 import es.albarregas.models.CalcularCuota;
-
 
 /**
  *
@@ -78,31 +77,28 @@ public class ContinenteController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String fecha = request.getParameter("fecha_construccion");
-            String valor = request.getParameter("valor_estimado");
-            String n_hab = request.getParameter("n_hab");
-            String tipo = request.getParameter("tipo");
-            String tipo_construccion = request.getParameter("tipo_construccion");
-            EleccionBean eleccionBean = (EleccionBean) request.getSession().getAttribute("eleccion");
-            CalcularCuota calcular = new CalcularCuota();
-            ContinenteBean continente = new ContinenteBean();
+        String valor = request.getParameter("valor_estimado");
+        EleccionBean eleccionBean = (EleccionBean) request.getSession().getAttribute("eleccion");
+        CalcularCuota calcular = new CalcularCuota();
+        ContinenteBean continente = new ContinenteBean();
 
-            continente.setTipo(tipo);
-            continente.setN_hab(n_hab);
-            continente.setFecha(fecha);
-            continente.setTipo_construccion(tipo_construccion);
-            continente.setValor(Integer.parseInt(valor));
-            continente.setCuota(calcular.getCuotaContinente(continente));
-    
+        try {
+            BeanUtils.populate(continente, request.getParameterMap());
+            continente.setValor(Integer.parseInt(valor)); 
+        } catch (Exception e) {
+            // Manejar excepciones si ocurren
+            e.printStackTrace();
+        }
 
-            request.getSession().setAttribute("continente", continente);
-
-            if (eleccionBean.isContenido()) {
-                request.getRequestDispatcher("JSP/contenido.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher("JSP/vistaFinal.jsp").forward(request, response);
-            }
-
+        continente.setCuota(calcular.getCuotaContinente(continente));
+        
+        request.getSession().setAttribute("continente", continente);
+        
+        if (eleccionBean.isContenido()) {
+            request.getRequestDispatcher("JSP/contenido.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("JSP/vistaFinal.jsp").forward(request, response);
+        }
     }
 
     /**

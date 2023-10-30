@@ -74,8 +74,10 @@ public class EleccionController extends HttpServlet {
             throws ServletException, IOException {
         String[] seguro = request.getParameterValues("seguro");
         EleccionBean eleccion = new EleccionBean();
-        
-        if(seguro.length == 1 && seguro[0].equals("continente")){
+
+        if(seguro == null){
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }else if(seguro.length == 1 && seguro[0].equals("continente")){
             eleccion.setContinente(true);
             request.getSession().setAttribute("eleccion", eleccion);
             request.getRequestDispatcher("JSP/continente.jsp").forward(request, response);

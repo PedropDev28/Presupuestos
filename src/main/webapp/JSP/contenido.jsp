@@ -19,7 +19,7 @@
         <%@include file="/INC/header.inc"%>
         <div class="main-container">
             <h2>Detalles de la poliza de contenido</h2>
-            <form action="<c:out value='${contextPath}' />/ContenidoController" method="post">
+            <form action="${contextPath}/ContenidoController" method="post">
                 <p>Rellene el siguiente formulario acerca de su contenido, cuando termine pulse el boton enviar</p><br />
                 <label for="danios">Cubir daños accidentales: </label>
                 <input type="checkbox" name="danios" id="danios" value="danios" checked /><br />

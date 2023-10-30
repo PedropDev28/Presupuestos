@@ -5,18 +5,18 @@
 --%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <!DOCTYPE html>
 <html>
     <head>
-        <%@include file="/INC/metas.inc"%>
+        <jsp:directive.include file="/INC/metas.inc"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="<c:out value="${contextPath}" />/CSS/style.css" type="text/css" />
         <link rel="shortcut icon" href="<c:out value="${contextPath}" />/IMG/icon.ico" />
         <title>Poliza Edificios</title>
     </head>
     <body>
-        <%@include file="/INC/header.inc"%>
+        <jsp:directive.include file="/INC/header.inc"/>
         <div class="main-container">
             <h2>Detalles de la poliza de edificios</h2>
             <form action="<c:out value='${contextPath}' />/ContinenteController" method="post">

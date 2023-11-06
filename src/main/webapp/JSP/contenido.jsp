@@ -21,7 +21,7 @@
             <h2>Detalles de la poliza de contenido</h2>
             <form action="${contextPath}/ContenidoController" method="post">
                 <p>Rellene el siguiente formulario acerca de su contenido, cuando termine pulse el boton enviar</p><br />
-                <label for="danios">Cubir daños accidentales: </label>
+                <label for="danios">Cubrir daños accidentales: </label>
                 <input type="checkbox" name="danios" id="danios" value="danios" checked /><br />
                 <label for="cantidad">Cantidad a asegurar(€): </label>
                 <select name="cantidad" id="cantidad">

@@ -4,12 +4,15 @@
     Author     : Pedro Lazaro
 --%>
 
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 <!DOCTYPE html>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" scope="session"/>
 <html>
-<html lang="es">
+<fmt:bundle basename="${sessionScope.codigo}"  >
+<html lang="${parte1}">
     <head>
         <jsp:directive.include file="/INC/metas.inc"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -18,15 +21,19 @@
         <title>ShieldSure Insurance</title>
     </head>
     <body>
+    
+        <fmt:setTimeZone value="${sessionScope.gmt}"/>
+        <p>${sessionScope.gmt}</p>
         <jsp:directive.include file="/INC/header.inc"/>
         <div class="main-container">
-            <h2>Elija su seguro</h2>
+                <h2><fmt:message key="Elija"/></h2>
             <form action="<c:out value="${contextPath}" />/EleccionController" method="post">
-                <p>Seleccione el tipo de seguro que desea contratar (Puede elegir uno o ambos):</p><br />
-                <input type="checkbox" name="seguro" value="continente" checked /> Seguro de edificios<br />
-                <input type="checkbox" name="seguro" value="contenido" checked /> Seguro de contenido<br /><br />
-                <input class="boton" type="submit" value="Continuar" />
+                <p><fmt:message key="Seleccione_Seguro"/></p><br />
+                <input type="checkbox" name="seguro" value="continente" checked /><fmt:message key="Seguro_edificios"/><br />
+                <input type="checkbox" name="seguro" value="contenido" checked /><fmt:message key="Seguro_contenido"/><br /><br />
+                <button type="submit" name="submit" value="submit"><fmt:message key="Continuar"/></button>
             </form>
         </div>
     </body>
 </html>
+</fmt:bundle>

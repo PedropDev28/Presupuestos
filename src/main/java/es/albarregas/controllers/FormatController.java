@@ -5,25 +5,22 @@
 package es.albarregas.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.net.http.HttpRequest;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.beanutils.BeanUtils;
-
-import es.albarregas.beans.ContenidoBean;
-import es.albarregas.models.CalcularCuota;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Pedro Lazaro
  */
-@WebServlet(name = "ContenidoController", urlPatterns = { "/ContenidoController" })
-public class ContenidoController extends HttpServlet {
+@WebServlet(name = "FormatController", urlPatterns = { "/FormatController" })
+public class FormatController extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -49,24 +46,34 @@ public class ContenidoController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Locale idioma = null;
+        String codigo = null;
+        HttpSession session = request.getSession();
 
-        CalcularCuota calcular = new CalcularCuota();
-        ContenidoBean contenido = new ContenidoBean();
+        String opcion = request.getParameter("pais");
+        if (!opcion.substring(opcion.indexOf("-") + 1).equals("no")) {
+            codigo = opcion.substring(0, opcion.indexOf("-"));
+            String nombre = opcion.substring(opcion.indexOf("-") + 1);
+            String parte1 = codigo.substring(0, codigo.indexOf("_"));
+            String parte2 = codigo.substring(codigo.indexOf("_") + 1);
+            if (nombre.contains("ñ")) {
+                idioma = request.getLocale();
+            } else {
+                idioma = new Locale(parte1, parte2);
+            }
 
-        try {
-            BeanUtils.populate(contenido, request.getParameterMap());
-        } catch (Exception e) {
-            // Manejar excepciones si ocurren
-            e.printStackTrace();
+            session.setAttribute("pais", nombre);
+            session.setAttribute("parte1", parte1);
+            session.setAttribute("codigo", codigo);
+            session.setAttribute("idioma", idioma);
+            request.getRequestDispatcher("JSP/inicio.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
 
-
-        contenido.setCuota(calcular.cuotaContenido(contenido));
-
-        request.setAttribute("contenido", contenido);
-        request.getRequestDispatcher("JSP/vistaFinal.jsp").forward(request, response);
-
     }
+
+    
 
     /**
      * Returns a short description of the servlet.

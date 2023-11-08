@@ -1,6 +1,6 @@
 <%-- 
     Document   : index
-    Created on : 25 oct. 2023, 10:04:30
+    Created on : 7 nov. 2023, 9:34:31
     Author     : Pedro Lazaro
 --%>
 
@@ -15,18 +15,22 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="<c:out value="${contextPath}" />/CSS/style.css" type="text/css" />
         <link rel="shortcut icon" href="<c:out value="${contextPath}" />/IMG/icon.ico" />
-        <title>ShieldSure Insurance</title>
+        <title>Eleccion de Idioma</title>
     </head>
     <body>
         <jsp:directive.include file="/INC/header.inc"/>
         <div class="main-container">
-            <h2>Elija su seguro</h2>
-            <form action="<c:out value="${contextPath}" />/EleccionController" method="post">
-                <p>Seleccione el tipo de seguro que desea contratar (Puede elegir uno o ambos):</p><br />
-                <input type="checkbox" name="seguro" value="continente" checked /> Seguro de edificios<br />
-                <input type="checkbox" name="seguro" value="contenido" checked /> Seguro de contenido<br /><br />
-                <input class="boton" type="submit" value="Continuar" />
+            <h2>Elija su idioma</h2>
+            <form action="<c:out value="${contextPath}" />/FormatController" method="post">
+                <select name="pais">
+                    <option value="-1" selected="selected">Elige una opci&oacute;n</option>
+                    <c:forEach var="item" items="${paises}">
+                        <option value="${item.value}-${item.key}">${item.key}</option>
+                    </c:forEach>
+            </select>
+            <input type="submit" value="Enviar" />
             </form>
         </div>
     </body>
 </html>
+

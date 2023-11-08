@@ -5,20 +5,24 @@
 package es.albarregas.controllers;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import es.albarregas.beans.EleccionBean;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Pedro Lazaro
  */
-@WebServlet(name = "EleccionController", urlPatterns = {"/EleccionController"})
-public class EleccionController extends HttpServlet {
+@WebServlet(name = "PaisesController", urlPatterns = { "/PaisesController" })
+public class PaisesController extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -31,6 +35,32 @@ public class EleccionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                        HttpSession session = request.getSession();
+
+        if (session.getAttribute("paises") == null) {
+            Locale locales[] = SimpleDateFormat.getAvailableLocales();
+            TreeMap<String, String> map = new TreeMap();
+            TreeMap<String, String> mapa = new TreeMap();
+            for (Locale local : locales) {
+                map.put(local.toString(), local.getDisplayName());
+            }
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String pais = entry.getValue();
+                int inicio = pais.indexOf("(");
+                int fin = pais.indexOf(")");
+                if (inicio != -1 && fin != -1) {
+                    if (!pais.contains(",") && !pais.contains(" y ") && !entry.getKey().contains("#")) {
+                        if (!mapa.containsValue(pais.substring(inicio + 1, fin))) {
+                            mapa.put(pais.substring(inicio + 1, fin), entry.getKey());
+                            
+                        }
+                    }
+                }
+            }
+            session.setAttribute("paises", mapa);
+        }
+
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     /**
@@ -44,25 +74,7 @@ public class EleccionController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] seguro = request.getParameterValues("seguro");
-        EleccionBean eleccion = new EleccionBean();
-
-        if(seguro == null){
-            request.getRequestDispatcher("JSP/inicio.jsp").forward(request, response);
-        }else if(seguro.length == 1 && seguro[0].equals("continente")){
-            eleccion.setContinente(true);
-            request.getSession().setAttribute("eleccion", eleccion);
-            request.getRequestDispatcher("JSP/continente.jsp").forward(request, response);
-        }else if(seguro.length == 1 && seguro[0].equals("contenido")){
-            eleccion.setContenido(true);
-            request.getSession().setAttribute("eleccion", eleccion);  
-            request.getRequestDispatcher("JSP/contenido.jsp").forward(request, response);
-        }else{
-            eleccion.setContinente(true);
-            eleccion.setContenido(true);
-            request.getSession().setAttribute("eleccion", eleccion);  
-            request.getRequestDispatcher("JSP/continente.jsp").forward(request, response);
-        } 
+        
     }
 
     /**

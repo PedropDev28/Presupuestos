@@ -5,11 +5,13 @@
 --%>
 
 
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <!DOCTYPE html>
-
-<html lang="es">
+<fmt:bundle basename="${sessionScope.codigo}"  >
+<html lang="${parte1}">
 <html>
     <head>
         <c:set var="eleccion" value="${sessionScope.eleccion}"/>
@@ -26,54 +28,70 @@
         <jsp:directive.include file="/INC/header.inc"/>
         <div class="main-container">
             <div class="content">
-                <h2>Cuota Final para su poliza</h2>
-                <p>A continuaciÃ³n se muestra lo que usted ha elegido, asÃ­ como la cuota final para esa eleccion</p>
+                <h2><fmt:message key="Cuota_Final_poliza"/></h2>
+                <p><fmt:message key="A_continuacion_datos"/></p>
                 <c:if test="${eleccion.isContinente()}">
                 <div class="edificio">
-                    <h3>Edificio</h5>
+                    <h3><fmt:message key="Edificio"/></h5>
                     <ul>
-                        <li>Tipo Edificio: ${continente.getTipo()}</li>
                         <c:choose>
-                            <c:when test="${continente.getN_hab() == 5}">
-                                <li>NÃºmero de Habitaciones: 5 o mas</li>
+                            <c:when test="${continente.getTipo() == 'Piso'}">
+                                <li><fmt:message key="Tipo"/><fmt:message key="Piso"/></li>
+                            </c:when>
+                            <c:when test="${continente.getTipo() == 'Casa'}">
+                                <li><fmt:message key="Tipo"/><fmt:message key="Casa"/></li>
+                            </c:when>
+                            <c:when test="${continente.getTipo() == 'Adosado'}">
+                                <li><fmt:message key="Tipo"/><fmt:message key="Adosado"/></li>
+                            </c:when>
+                            <c:when test="${continente.getTipo() == 'Duplex'}">
+                                <li><fmt:message key="Tipo"/><fmt:message key="Duplex"/></li>
                             </c:when>
                             <c:otherwise>
-                                <li>NÃºmero de Habitaciones: ${continente.getN_hab()}</li>
+                                <li><fmt:message key="Tipo"/><fmt:message key="Chalet"/></li>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${continente.getN_hab() == 5}">
+                                <li><fmt:message key="Numero"/><fmt:message key="Mas5"/></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><fmt:message key="Numero"/>${continente.getN_hab()}</li>
                             </c:otherwise>
                         </c:choose>
                         <c:choose>
                             <c:when test="${continente.getFecha() == 1949}">
-                                <li>Fecha de ConstrucciÃ³n: antes de 1950</li>
+                                <li><fmt:message key="Fecha"/> <fmt:message key="antes1950"/></li>
                             </c:when>
                             <c:when test="${continente.getFecha() == 1950}">
-                                <li>Fecha de ConstrucciÃ³n: entre 1950 y 1990</li>
+                                <li><fmt:message key="Fecha"/> <fmt:message key="entre1950"/></li>
                             </c:when>
                             <c:when test="${continente.getFecha() == 1991}">
-                                <li>Fecha de ConstrucciÃ³n: entre 1991 y 2005</li>
+                                <li><fmt:message key="Fecha"/> <fmt:message key="entre1991"/></li>
                             </c:when>
                             <c:when test="${continente.getFecha() == 2006}">
-                                <li>Fecha de ConstrucciÃ³n: entre 2006 y 2015</li>
+                                <li><fmt:message key="Fecha"/> <fmt:message key="entre2006"/></li>
                             </c:when>
                             <c:otherwise>
-                                <li>Fecha de ConstrucciÃ³n: despuÃ©s de 2015</li>
+                                <li><fmt:message key="Fecha"/> <fmt:message key="despues2015"/></li>
                             </c:otherwise>
                         </c:choose>
-                        <li>Tipo de ConstrucciÃ³n: ${continente.getTipo_construccion()}</li>
+                        <li><fmt:message key="Tipo"/> ${continente.getTipo_construccion()}</li>
                         <c:choose>
                             <c:when test="${continente.getValor() == 25000}">
-                                <li>Valor estimado en el mercado(â¬): menos de 50.000</li>
+                                <li><fmt:message key="Valor_vivienda"/> <fmt:message key="menos50000"/></li>
                             </c:when>
                             <c:when test="${continente.getValor() == 50001}">
-                                <li>Valor estimado en el mercado(â¬): entre 50.001 y 80.000</li>
+                                <li><fmt:message key="Valor_vivienda"/> <fmt:message key="entre50001"/></li>
                             </c:when>
                             <c:when test="${continente.getValor() == 80001}">
-                                <li>Valor estimado en el mercado(â¬): entre 80.001 y 100.000</li>
+                                <li><fmt:message key="Valor_vivienda"/> <fmt:message key="entre80001"/></li>
                             </c:when>
                             <c:when test="${continente.getValor() == 100001}">
-                                <li>Valor estimado en el mercado(â¬): entre 100.001 y 150.000</li>
+                                <li><fmt:message key="Valor_vivienda"/> <fmt:message key="entre100001"/></li>
                             </c:when>
                             <c:otherwise>
-                                <li>Valor estimado en el mercado(â¬): mÃ¡s de 150.000</li>
+                                <li><fmt:message key="Valor_vivienda"/> <fmt:message key="mas150000"/></li>
                             </c:otherwise>
                         </c:choose>
                     </ul>
@@ -81,34 +99,35 @@
                 </c:if>
                 <c:if test="${eleccion.isContenido()}">
                 <div class="contenido">
-                    <h3>Contenido</h3>
+                    <h3><fmt:message key="Contenido"/></h3>
                     <ul>
                         <c:choose>
                             <c:when test="${contenido.isDanios()}">
-                                <li>Cubrir daÃ±os accidentales: SÃ­</li>
+                                <li><fmt:message key="Cubrir_accidentales"/> <fmt:message key="Si"/></li>
                             </c:when>
                             <c:otherwise>
-                                <li>Cubrir daÃ±os accidentales: No</li>
+                                <li><fmt:message key="Cubrir_accidentales"/> <fmt:message key="No"/></li>
                             </c:otherwise>
                         </c:choose>
-                        <li>Cantidad a asegurar: ${contenido.getCantidad()}â¬</li>
+                        <li><fmt:message key="Cantidad"/> ${contenido.getCantidad()}€</li>
                         <c:choose>
                             <c:when test="${contenido.getFranquicia() == 'Ninguna'}">
-                                <li>Franquicia: ${contenido.getFranquicia()}</li>
+                                <li><fmt:message key="Franquicia"/> <fmt:message key="Ninguna"/></li>
                             </c:when>
                             <c:otherwise>
-                                <li>Franquicia: ${contenido.getFranquicia()}â¬</li>
+                                <li><fmt:message key="Franquicia"/> ${contenido.getFranquicia()}€</li>
                             </c:otherwise>
                         </c:choose>
                     </ul>
                 </div>
                 </c:if>
                 <div class="total">
-                    <h3>Total Cuota</h3>
-                    <p><c:out value="${total}"/>â¬</p>
+                    <h3><fmt:message key="Total_Cuota"/></h3>
+                    <p><c:out value="${total}"/>€</p>
                 </div>
-                 <button class="boton" onclick="location.href='index.jsp'">Volver</button>
+                <button class="boton" onclick="location.href='inicio.jsp'"><fmt:message key="Volver"/></button>
             </div>            
     </div>
     </body>
 </html>
+</fmt:bundle>
